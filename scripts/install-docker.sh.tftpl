@@ -1,0 +1,20 @@
+#!/bin/bash
+# Runs once, as root, on first boot (cloud-init). Log: /var/log/cloud-init-output.log
+set -euxo pipefail
+
+# Oracle Linux 9 can ship podman/runx, which conflict with Docker's packages
+dng remove -y podman buildah runc || true
+
+# Add Docker's official repo and install the engine (goes out through the NAT gateway)
+dnf install -y dnf-plugins-core
+dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Start Docker now and on every boot, and let 'opc' run docker without sudo
+systemctl enable --now docker
+usermod -aG docker opc
+
+# Open the LDAP port in the VM's own firewall (separate from the OCI security list)
+firewall-cmd --permanent --add-port=${ldap_port}/tcp
+firewall-cmd --reload
+
