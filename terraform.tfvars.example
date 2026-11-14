@@ -1,0 +1,11 @@
+
+user_ocid             = "YOUR_USER_OCID"
+fingerprint           = "YOUR FINGERPRINT"
+tenancy_ocid          = "OCI_TENANCY_ID"
+region                = "<eg 'ca-toronto-1'>"
+private_key_path      = "PATH TO YOUR PRIVATE PEM KEY"
+laptop_cidr           = "xx.xx.xx.xx/32"
+laptop_public_ip      = "xx.xx.xx.xx"
+laptop_ike_identifier = "xx.xx.xx.xx"
+instance_shape        = "VM.Standard.E5.Flex(check availability with OCI in your region)"
+instance_memory_gbs   = 4
