@@ -27,6 +27,7 @@ env:
   TF_VAR_laptop_ike_identifier: ${{ secrets.TF_VAR_laptop_ike_identifier }}
   TF_VAR_instance_shape: ${{ secrets.TF_VAR_instance_shape }}
   TF_VAR_instance_memory_gbs: ${{ secrets.TF_VAR_instance_memory_gbs }}
+  TF_VAR_ssh_public_key: ${{ secrets.TF_VAR_ssh_public_key }}
 
 jobs:
   terraform:

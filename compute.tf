@@ -5,7 +5,7 @@ data "oci_identity_availability_domains" "ads" {
 
 # Newest Oracle Linux 9 platform image that is compatible with the chosen shape
 data "oci_core_images" "ol9" {
-  compartment_id           = var.tenancy_ocid
+  compartment_id           = oci_identity_compartment.test_compartment.id
   operating_system         = "Oracle Linux"
   operating_system_version = "9"
   shape                    = var.instance_shape
@@ -40,7 +40,7 @@ resource "oci_core_instance" "vm" {
   }
 
   metadata = {
-    ssh_authorized_keys = file(pathexpand(var.ssh_public_key_path))
+    ssh_authorized_keys = var.ssh_public_key
     user_data = base64encode(templatefile("${path.module}/scripts/install-docker.sh.tftpl", {
       ldap_port = var.ldap_port
     }))
