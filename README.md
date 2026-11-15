@@ -1,1 +1,1 @@
-# Secure Access Solution w/ Oracel & Terraform
+# Secure Access Solution w/ Oracle & Terraform
