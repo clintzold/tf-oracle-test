@@ -88,7 +88,7 @@ jobs:
             })
 
       - name: Add Plan to Job Summary
-        if: github.ref == 'refs/head/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           PLAN: "${{ steps.plan.outputs.stdout }}"
         run: |
@@ -114,7 +114,7 @@ jobs:
   apply:
     name: Terraform Apply
     needs: plan
-    if: github.ref == 'refs/head/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     steps:
