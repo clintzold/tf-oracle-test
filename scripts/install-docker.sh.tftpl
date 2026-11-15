@@ -18,3 +18,5 @@ usermod -aG docker opc
 firewall-cmd --permanent --add-port=${ldap_port}/tcp
 firewall-cmd --reload
 
+# Pull and run simple LDAP service container
+docker run -d --name ldap --restart unless-stopped -p 389:389 -e LDAP_ORGANISATION=Test -e LDAP_DOMAIN=example.org -e LDAP_ADMIN_PASSWORD=changeme osixia/openldap:1.5.0
