@@ -1,4 +1,3 @@
-
 user_ocid             = "YOUR_USER_OCID"
 fingerprint           = "YOUR FINGERPRINT"
 tenancy_ocid          = "OCI_TENANCY_ID"

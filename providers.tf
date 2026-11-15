@@ -10,11 +10,12 @@ terraform {
 }
 
 provider "oci" {
-  tenancy_ocid = var.tenancy_ocid
-  user_ocid    = var.user_ocid
-  fingerprint  = var.fingerprint
-  private_key  = var.private_key # change to file("path/to/key.pem") to run Terraform locally (apply will NOT work)
-  region       = var.region
+  tenancy_ocid     = var.tenancy_ocid
+  user_ocid        = var.user_ocid
+  fingerprint      = var.fingerprint
+  private_key      = var.private_key
+  private_key_path = var.private_key_path # Optionally define in local tfvars file to run terraform cmds
+  region           = var.region
 }
 
 variable "tenancy_ocid" {
@@ -36,6 +37,13 @@ variable "private_key" {
   description = "Private key for GitHub runners"
   type        = string
   sensitive   = true
+  default     = null
+}
+
+variable "private_key_path" {
+  description = "Optional private key path for local dev purposes."
+  type        = string
+  default     = null
 }
 
 variable "region" {
