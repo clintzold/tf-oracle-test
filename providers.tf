@@ -1,4 +1,6 @@
 terraform {
+  required_version = "~> 1.17.0"
+
   required_providers {
     oci = {
       source  = "oracle/oci"
@@ -8,11 +10,11 @@ terraform {
 }
 
 provider "oci" {
-  tenancy_ocid     = var.tenancy_ocid
-  user_ocid        = var.user_ocid
-  fingerprint      = var.fingerprint
-  private_key_path = var.private_key_path
-  region           = var.region
+  tenancy_ocid = var.tenancy_ocid
+  user_ocid    = var.user_ocid
+  fingerprint  = var.fingerprint
+  private_key  = var.private_key # change to file("path/to/key.pem") to run Terraform locally (apply will NOT work)
+  region       = var.region
 }
 
 variable "tenancy_ocid" {
@@ -30,9 +32,10 @@ variable "fingerprint" {
   type        = string
 }
 
-variable "private_key_path" {
-  description = "Local path to your private PEM key"
+variable "private_key" {
+  description = "Private key for GitHub runners"
   type        = string
+  sensitive   = true
 }
 
 variable "region" {
