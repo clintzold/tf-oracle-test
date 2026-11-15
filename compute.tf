@@ -40,7 +40,7 @@ resource "oci_core_instance" "vm" {
   }
 
   metadata = {
-    ssh_authorized_keys = file(pathexpand(var.ssh_public_key_path))
+    ssh_authorized_keys = var.ssh_public_key
     user_data = base64encode(templatefile("${path.module}/scripts/install-docker.sh.tftpl", {
       ldap_port = var.ldap_port
     }))

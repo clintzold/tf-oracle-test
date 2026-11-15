@@ -31,10 +31,10 @@ variable "allow_ssh_from_laptop" {
   default     = true
 }
 
-variable "ssh_public_key_path" {
-  description = "Path to the SSH public key that will be allowed to log in as 'opc'."
+variable "ssh_public_key" {
+  description = "SSH public key that will be allowed to log in as 'opc'."
   type        = string
-  default     = "~/.ssh/id_ed25519.pub"
+  default     = null
 }
 
 variable "instance_shape" {
