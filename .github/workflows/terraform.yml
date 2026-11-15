@@ -30,8 +30,8 @@ env:
   TF_VAR_ssh_public_key: ${{ secrets.TF_VAR_ssh_public_key }}
 
 jobs:
-  terraform:
-    name: Terraform Plan & Apply
+  plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -57,7 +57,6 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -out=tfplan
         continue-on-error: true
 
@@ -92,6 +91,36 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Terraform Apply
+      - name: Upload Plan Artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -no-color
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-artifact
+          path: tfplan
+          retention-days: 1
+  
+  apply:
+    name: Terraform Apply
+    needs: plan
+    if: github.ref == 'refs/head/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-artifact
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
