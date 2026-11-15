@@ -87,6 +87,16 @@ jobs:
               body: output
             })
 
+      - name: Add Plan to Job Summary
+        if: github.ref == 'refs/head/main' && github.event_name == 'push'
+        env:
+          PLAN: "${{ steps.plan.outputs.stdout }}"
+        run: |
+          echo "### 📋 Final Production Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          echo '```terraform' >> \$GITHUB_STEP_SUMMARY
+          echo "PLAN" >> GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
       - name: Fail Build if Plan Failed
         if: steps.plan.outcome == 'failure'
         run: exit 1
