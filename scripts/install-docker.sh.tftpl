@@ -2,8 +2,8 @@
 # Runs once, as root, on first boot (cloud-init). Log: /var/log/cloud-init-output.log
 set -euxo pipefail
 
-# Let opc run podman without sudo
-usermod -aG podman opc
+# Pull podman and companion container utlities
+dnf install -y container-tools
 
 # Open the LDAP port in the VM's own firewall (separate from the OCI security list)
 firewall-cmd --permanent --add-port=${ldap_port}/tcp
