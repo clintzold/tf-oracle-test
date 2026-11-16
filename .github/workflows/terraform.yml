@@ -99,6 +99,18 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Add Plan to Job Summary
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          PLAN: "${{ steps.plan.outputs.stdout }}"
+        run: |
+          {
+            echo "### 📋 Final Production Terraform Plan"
+            echo '```terraform'
+            echo "$PLAN"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Fail Build if Plan Failed
         if: steps.plan.outcome == 'failure'
         run: exit 1
@@ -110,7 +122,7 @@ jobs:
           name: tfplan-artifact
           path: tfplan
           retention-days: 1
-
+  
   apply:
     name: Terraform Apply
     needs: plan
@@ -118,26 +130,16 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v7
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v4
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Format Check
-        id: fmt
-        run: terraform fmt -check -recursive
-        continue-on-error: true
-
       - name: Terraform Init
-        id: init
-        run: terraform init -no-color
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+        run: terraform init
 
       - name: Download Plan Artifact
         uses: actions/download-artifact@v8
@@ -146,6 +148,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-
-
-
