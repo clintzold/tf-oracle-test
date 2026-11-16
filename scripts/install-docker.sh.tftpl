@@ -13,4 +13,4 @@ firewall-cmd --reload
 systemctl enable --now podman-restart.service
 
 # Pull and run simple LDAP service container
-podman run -d --name ldap --restart unless-stopped -p 389:389 -e LDAP_ORGANISATION=Test -e LDAP_DOMAIN=example.org -e LDAP_ADMIN_PASSWORD=changeme osixia/openldap:1.5.0
+podman run -d --name ldap --restart unless-stopped -p 389:389 -e LDAP_ORGANISATION=Test -e LDAP_DOMAIN=example.org -e LDAP_ADMIN_PASSWORD=changeme docker.io/osixia/openldap:1.5.0
